@@ -12,6 +12,9 @@
     "Eclipse",
     "Nodeclipse"
   ],
+  "dependencies": {
+	    "express": "3.x"
+  },
   "author": "",
   "license": "BSD",
   "readmeFilename": "README.md"
