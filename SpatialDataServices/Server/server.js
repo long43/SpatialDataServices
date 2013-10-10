@@ -9,7 +9,14 @@ function start(route, lexer) {
   }
 
   console.log("list the tokens" + lexer);
- 
+  var str = "EntityID eq '123'";
+  var p = new RegExp("^" + "[a-zA-Z]|[0-9]|\_" + "$");
+  var bFound = p.test(str);
+  console.log(bFound);
+  //var token = lexer.nextToken("EntityID eq '123'");
+  //for (var key in token){
+ //  console.log(token[key]);
+  //}
   http.createServer(onRequest).listen(8880);
   console.log("Server has started."); 
 }
