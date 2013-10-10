@@ -42,11 +42,14 @@ var lexer = function() {
 		var length = 0;
 		for (var i = 1; i <= remainedString.length; i++){
 			var substr = remainedString.substring(0,i);
+			console.log("remained str is " + substr);
 			var find = false;
 			//console.log("substr is " + substr);
 			for (var key in self.tokens){
-				var pattern = '^' + self.tokens[key] + '$';
-				if (substr.match(pattern)){
+				var str = "^" + self.tokens[key] + "$";
+				console.log('test for ' + str);
+				var pattern = new RegExp(str);
+				if (pattern.test(substr)){
 					find = true;
 					matchedKey = key;
 					break;
@@ -54,8 +57,8 @@ var lexer = function() {
 			}
 			//console.log("matched key is " + matchedKey);
 			if (find == false){
-				console.log("error in grammar");
-				return;
+				console.log(matchedKey + " : " + substr);
+				break;
 			}
 			length++;
 		}	
