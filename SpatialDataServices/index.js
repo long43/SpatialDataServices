@@ -1,6 +1,12 @@
 var server = require("./Server/server");
 var router = require("./Server/router");
 var requestHandlers = require("./Handlers/requestHandlers");
-var handle = require("./app_route");
+var odatalexer = require("./OData/odatalexer");
 
-server.start(router.route, handle);
+var lexer = new odatalexer();
+
+lexer.on("Completed", function() {
+	server.start(router, lexer);
+});
+
+lexer.loadLex();
