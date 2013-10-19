@@ -13,7 +13,7 @@ function start(route, lexer) {
 //  var p = /^[a-z]|[A-Z]|[0-9]|_$/;
 //  var bFound = p.test(str);
 //  console.log(bFound);
-  var token = lexer.nextToken('eq 31231');
+  var token = lexer.nextToken('\'31231\'');
   for (var key in token){
    console.log("pattern is " + key + " match string is " + token[key]);
   }
