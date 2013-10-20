@@ -25,30 +25,27 @@ var parser = function(lexer, remainedStr){
 				return;
 			}
 			
+			//if matched with (, then just push into the stack
 			if (match == '('){
 				var exp = new expression(match);
 				self.opStack.push(exp);
 			}
 			else if (match == 'EQ' || match == 'NE' || match == 'GT' || match == 'LT'){
 				var exp = new expression(match);
-				
-				if (self.opStack.length == 0 || self.opStack[self.opStack.length - 1] == '('){
-					self.opStack.push(exp);
-				}
-				else{
-					do{
-						self.popConnectPush();
-					}
-					while(self.opStack.length != 0 && self.opStack[self.opStack.length - 1] != '(');
-					self.opStack.push(exp);
-				}
+				self.opStack.push(exp);
 			}
-			else if (match == 'AND' || match == 'OR'){
-				
+			//if match == 'AND' or match == 'OR', then we need to 
+			//if operator stack is not empty and the top of the stack is not ( and 
+			//it means the we are encountering a new operator, you need to pop the previous operator to get a unit tree
+			else if (match == 'AND' || match == 'OR' || match == ')'){
+				var exp = new expression(match);
+				do{
+					self.popConnectPush();
+				}
+				while(self.opStack.length != 0 && self.opStack[self.opStack.length - 1] != '(');
+				self.opStack.push(exp);
 			}
-			
-		} while(a == b);
-		
+		} while(true);
 	};
 	
 };
