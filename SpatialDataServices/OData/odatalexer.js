@@ -39,7 +39,7 @@ var lexer = function() {
 	
 	this.nextDelimiter = function(remaindedString, end){
 		var key = "SPACE";
-		console.log(self.tokens[key]);
+		//console.log(self.tokens[key]);
 		for (var i = end - 1; i >= 0; i --){
 			var c = remaindedString.charAt(i);
 			var pattern = new RegExp("^" + self.tokens['SPACE'] + "$");
@@ -56,7 +56,7 @@ var lexer = function() {
 		var lastSpace = remainedString.length;
 		while (lastSpace >= 0){
 			var substr = remainedString.substring(0,lastSpace);
-			console.log("remained str is " + substr + " last space is at " + lastSpace);
+			//console.log("remained str is " + substr + " last space is at " + lastSpace);
 			var find = false;
 			//console.log("substr is " + substr);
 			for (var key in self.tokens){
@@ -71,13 +71,23 @@ var lexer = function() {
 			}
 			//console.log("matched key is " + matchedKey);
 			if (find == true){
-				console.log(matchedKey + " : " + substr);
+				//console.log(matchedKey + " : " + substr);
 				break;
 			}
-			lastSpace = this.nextDelimiter(remainedString, lastSpace);
+			if (remainedString.charAt(0) == '('){
+				lastSpace = 1;
+			}
+			else{
+				lastSpace = this.nextDelimiter(remainedString, lastSpace);	
+				if (lastSpace == 0){
+					if (remainedString.indexOf(')') != -1){
+						lastSpace = remainedString.indexOf(')');
+					}
+				}
+			}
 		}	
 		matched[matchedKey] = remainedString.substring(0,lastSpace);
-		return matched;
+		return matched[matchedKey];
 	};
 };
 
