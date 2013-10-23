@@ -1,0 +1,16 @@
+dataflowName=(upload|getinfo|download|delete)
+id=[0-9A-Za-z]{32,32}
+dataSourceName=[0-9A-Za-z]{1,32}
+entityType=[0-9A-Za-z]{1,32}
+
+Dataflow_CreateJob=dataflow/{dataflowName}#POST
+Dataflow_GetJob=dataflow/{dataflowName}/{id}#GET
+Dataflow_Download=dataflow/{dataflowName}/{id}/{dataSourceName}#GET
+Dataflow_Delete=dataflow/{dataflowName}/{id}/{dataSourceName}#DELETE
+
+DataService_GetDataSource=data/{id}/{dataSourceName}#GET
+DataService_GetDataSources=data#GET
+DataService_GetDataSourceMetadata=data/{id}/{dataSourceName}//$metadata#GET
+DataService_GetAllMetadata=data//$metadata#GET
+DataService_QueryDataSource=data/{id}/{dataSourceName}/{entityType}#GET
+

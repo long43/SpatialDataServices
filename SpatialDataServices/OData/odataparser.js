@@ -14,11 +14,6 @@ var parser = function(lexer){
 		
 		opNode.left = expNodeLeft;
 		opNode.right = expNodeRight;
-		
-		if (opNode.left == null || opNode.right == null){
-			console.log("the expression is not balanced");
-			return false;
-		}
 		console.log("pop exp from exp stack " + expNodeRight.value);
 		console.log("pop exp from exp stack " + expNodeLeft.value);
 		self.expStack.push(opNode);
@@ -39,12 +34,16 @@ var parser = function(lexer){
 		var isValid = true;
 		do {
 			var match = lexer.nextToken(remainedStr);
-			remainedStr = remainedStr.replace(match,'').trim();
-			console.log("match is " + match);
-			if (match == ''){
-				console.log("match is empty");
+			if (match == null || match == ''){
 				break;
 			}
+			if (match == false){
+				console.log("match is empty");
+				isValid = false;
+				break;
+			}
+			remainedStr = remainedStr.replace(match,'').trim();
+			console.log("match is " + match);
 			//if matched with (, then just push into the stack
 			if (match == '(' || match == 'EQ' || match == 'NE' || match == 'GT' || match == 'LT'){
 				var exp = new expression(match);
@@ -58,10 +57,7 @@ var parser = function(lexer){
 				var exp = new expression(match);
 				while(self.opStack.length != 0 && self.opStack[self.opStack.length - 1].value != '('){
 					console.log("top is " + self.opStack[self.opStack.length - 1].value);
-					if (self.popConnectPush() == false){
-						isValid = false;
-						break;
-					}
+					self.popConnectPush();
 					console.log("opstack length is " + self.opStack.length);
 				}
 				
@@ -71,10 +67,7 @@ var parser = function(lexer){
 			//if it's ) then pop stack to form the expression tree
 			else if (match == ')'){
 				while(self.opStack.length != 0 && self.opStack[self.opStack.length - 1].value != '('){
-					if (self.popConnectPush() == false){
-						isValid = false;
-						break;
-					}
+					self.popConnectPush();
 				}
 				if (self.opStack.length != 0){
 					self.opStack.pop();
@@ -85,21 +78,23 @@ var parser = function(lexer){
 				var exp = new expression(match);
 				self.expStack.push(exp);
 			}
-			
-			if (isValid == false){
-				break;
-			}
 		} while(true);
 		
 		if (isValid == true){
+			console.log("it's legal expression");
 			while(self.opStack.length != 0 && self.opStack[self.opStack.length - 1].value != '('){
-				if (self.popConnectPush() == false){
-					return false;
-				}
+				self.popConnectPush();
+			}
+			if (self.expStack.length > 1){
+				return false;
+			}
+			else{
+				return self.expStack.pop();
 			}
 		}	
-		console.log("isValid is " + isValid);
-		return self.expStack.pop();
+		else{
+			return false;
+		}
 	};
 };
 

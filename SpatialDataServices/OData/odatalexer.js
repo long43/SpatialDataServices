@@ -40,9 +40,9 @@ var lexer = function() {
 	this.nextDelimiter = function(remaindedString, end){
 		var key = "SPACE";
 		//console.log(self.tokens[key]);
-		for (var i = end - 1; i >= 0; i --){
+		for (var i = end - 1; i >= 0; i--){
 			var c = remaindedString.charAt(i);
-			var pattern = new RegExp("^" + self.tokens['SPACE'] + "$");
+			var pattern = new RegExp("^" + self.tokens[key] + "$");
 			if (pattern.test(c)){
 				return i;  
 			}
@@ -51,13 +51,15 @@ var lexer = function() {
 	};
 
 	this.nextToken = function(remainedString){
+		if (remainedString == null || remainedString == ''){
+			return;
+		}
 		var matched = [];
 		var matchedKey = '';
 		var lastSpace = remainedString.length;
-		while (lastSpace >= 0){
+		var find = false;
+		while (lastSpace > 0){
 			var substr = remainedString.substring(0,lastSpace);
-			//console.log("remained str is " + substr + " last space is at " + lastSpace);
-			var find = false;
 			//console.log("substr is " + substr);
 			for (var key in self.tokens){
 				var str = "^" + self.tokens[key] + "$";
@@ -74,20 +76,25 @@ var lexer = function() {
 				//console.log(matchedKey + " : " + substr);
 				break;
 			}
-			if (remainedString.charAt(0) == '('){
+			else if (substr.charAt(0) == '('){
 				lastSpace = 1;
 			}
 			else{
-				lastSpace = this.nextDelimiter(remainedString, lastSpace);	
+				lastSpace = this.nextDelimiter(substr, lastSpace);	
 				if (lastSpace == 0){
-					if (remainedString.indexOf(')') != -1){
-						lastSpace = remainedString.indexOf(')');
+					if (substr.indexOf(')') != -1){
+						lastSpace = substr.indexOf(')');
 					}
 				}
 			}
 		}	
-		matched[matchedKey] = remainedString.substring(0,lastSpace);
-		return matched[matchedKey];
+		if (find == true){
+			matched[matchedKey] = remainedString.substring(0,lastSpace);
+			return matched[matchedKey];
+		}
+		else{
+			return false;
+		}
 	};
 };
 

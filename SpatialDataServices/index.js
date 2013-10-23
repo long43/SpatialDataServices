@@ -6,9 +6,13 @@ var odataparser = require("./Odata/odataparser");
 
 var lexer = new odatalexer();
 var parser = new odataparser();
+var router = new router();
 
 lexer.on("Completed", function() {
-	server.start(router, lexer, parser);
+	router.on("Completed", function(){
+		server.start(router, lexer, parser);
+	});
 });
 
 lexer.loadLex();
+router.loadRoutes();
