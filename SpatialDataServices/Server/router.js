@@ -43,7 +43,7 @@ var router = function(){
 		for (var key in self.routes){
 			var str = "^" + self.routes[key] + "$";
 			var pattern = new RegExp(str,'i');
-			console.log("route name is " + key + " and pattern is " + pattern);
+			console.log("route name is " + key + " and pattern is " + pattern + " and path is " + path);
 			if (pattern.test(path)){
 				console.log("yes found route " + key);
 				return key;
