@@ -1,5 +1,7 @@
 
-var handlers = function(){
+var handlers = function(queryString){
+	this.queryString = queryString;
+	
 	this.dataflowCreateUploadJob = function(response){
 		console.log("Request handler 'create upload job' was called.");
 		response.writeHead(200, {"Content-Type": "text/plain"});

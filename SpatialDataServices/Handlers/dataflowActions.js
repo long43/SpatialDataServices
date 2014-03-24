@@ -1,11 +1,17 @@
 var handlers = require("./requestHandlers");
 
-var actions = function(){
+var actions = function(path, query){
 	var self = this;
-	self.handler = new handlers();
+	this.query = query;
+	this.path = path;
+	console.log("the path is " + path);
 	
-	this.dataflowCreateJobAction = function(path, response){
-		var dataflowAction = path.split('/')[2].toLowerCase();
+	console.log("the query params are:" + query);
+	
+	self.handler = new handlers(this.queryString);
+	
+	this.dataflowCreateJobAction = function(response){
+		var dataflowAction = self.path.split('/')[2].toLowerCase();
 		switch(dataflowAction){
 			case "upload":
 				console.log("this is create upload job request");
@@ -19,8 +25,8 @@ var actions = function(){
 		}
 	};
 
-	this.dataflowGetJobAction = function(path, response){
-		var parameters = path.split('/');
+	this.dataflowGetJobAction = function(response){
+		var parameters = self.path.split('/');
 		var dataflowAction = parameters[2].toLowerCase();
 		var jobId = parameters[3];
 		switch(dataflowAction){
@@ -35,8 +41,8 @@ var actions = function(){
 		}
 	};
 
-	this.dataflowQueryAction = function(path, response){
-		var parameters = path.split('/');
+	this.dataflowQueryAction = function(response){
+		var parameters = self.path.split('/');
 		var accessId = parameters[2];
 		var dataSourceName = parameters[3];
 		var entityType = parameters[4];
